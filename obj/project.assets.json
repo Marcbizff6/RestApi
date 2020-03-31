@@ -8314,19 +8314,19 @@
     ]
   },
   "packageFolders": {
-    "/home/jonathanmurray/.nuget/packages/": {}
+    "/home/marc/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/jonathanmurray/RestApi/RestApi.csproj",
+      "projectUniqueName": "/home/marc/API/RestApi/RestApi.csproj",
       "projectName": "RestApi",
-      "projectPath": "/home/jonathanmurray/RestApi/RestApi.csproj",
-      "packagesPath": "/home/jonathanmurray/.nuget/packages/",
-      "outputPath": "/home/jonathanmurray/RestApi/obj/",
+      "projectPath": "/home/marc/API/RestApi/RestApi.csproj",
+      "packagesPath": "/home/marc/.nuget/packages/",
+      "outputPath": "/home/marc/API/RestApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/jonathanmurray/.nuget/NuGet/NuGet.Config"
+        "/home/marc/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netcoreapp3.1"
