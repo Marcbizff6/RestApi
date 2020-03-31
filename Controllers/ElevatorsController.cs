@@ -36,7 +36,7 @@ namespace RestApi.Controllers
  //https://stackoverflow.com/questions/16459155/how-to-access-json-object-in-c-sharp
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Elevators>> GetElevators(long id, string Status)
+        public async Task<ActionResult<Elevators>> GetElevators(long id, string Building_type)
         {
             var Elevators = await _context.Elevators.FindAsync(id);
 
@@ -46,7 +46,7 @@ namespace RestApi.Controllers
             }
 
             var jsonGet = new JObject ();
-            jsonGet["status"] = Elevators.Status;
+            jsonGet["Building_type"] = Elevators.Building_type;
             return Content  (jsonGet.ToString(), "application/json");
         }
 
