@@ -11,11 +11,16 @@ namespace RestApi.Models
 
         public DbSet<Batteries> Batteries { get; set; } // specifies all informations about DB multiple tables
 
+        public DbSet<Elevators> Elevators { get; set; } 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Batteries>()
                 .ToTable("batteries");
+
+             modelBuilder.Entity<Elevators>()
+                .ToTable("elevators");
+
         }
 
     }

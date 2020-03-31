@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RestApi.Models;
+using Newtonsoft.Json.Linq;
 
 namespace RestApi.Controllers
 {
@@ -28,8 +29,14 @@ namespace RestApi.Controllers
         }
 
         // GET: api/Batteries/5
+
+
+ //https://stackoverflow.com/questions/16507222/create-json-object-dynamically-via-javascript-without-concate-strings
+ 
+//  return this.Content(returntext, "application/json");
+
         [HttpGet("{id}")]
-        public async Task<ActionResult<Batteries>> GetBatteries(long id)
+        public async Task<ActionResult<Batteries>> GetBatteries(long id, string Status)
         {
             var batteries = await _context.Batteries.FindAsync(id);
 
@@ -38,7 +45,9 @@ namespace RestApi.Controllers
                 return NotFound();
             }
 
-            return batteries;
+            var jsonGet = new JObject ();
+            jsonGet["status"] = batteries.Status;
+            return Content  (jsonGet.ToString(), "application/json");
         }
 
         // PUT: api/Batteries/5
@@ -69,8 +78,11 @@ namespace RestApi.Controllers
                     throw;
                 }
             }
+            
+            var jsonPut = new JObject ();
+            jsonPut["Update"] = "Update done to batteries id : " + id;
+            return Content  (jsonPut.ToString(), "application/json");
 
-            return NoContent();
         }
 
         // POST: api/Batteries
