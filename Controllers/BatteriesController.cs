@@ -46,7 +46,7 @@ namespace RestApi.Controllers
             }
 
             var jsonGet = new JObject ();
-            jsonGet["status"] = batteries.Status;
+            jsonGet["status"] = batteries.status;
             return Content  (jsonGet.ToString(), "application/json");
         }
 
@@ -56,7 +56,7 @@ namespace RestApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutBatteries(long id, Batteries batteries)
         {
-            if (id != batteries.Id)
+            if (id != batteries.id)
             {
                 return BadRequest();
             }
@@ -94,7 +94,7 @@ namespace RestApi.Controllers
             _context.Batteries.Add(batteries);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBatteries", new { id = batteries.Id }, batteries);
+            return CreatedAtAction("GetBatteries", new { id = batteries.id }, batteries);
         }
 
         // DELETE: api/Batteries/5
@@ -115,7 +115,7 @@ namespace RestApi.Controllers
 
         private bool BatteriesExists(long id)
         {
-            return _context.Batteries.Any(e => e.Id == id);
+            return _context.Batteries.Any(e => e.id == id);
         }
     }
 }

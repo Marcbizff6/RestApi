@@ -13,13 +13,34 @@ namespace RestApi.Models
 
         public DbSet<Elevators> Elevators { get; set; } 
 
+        public DbSet<Columns> Columns {get; set;}
+
+        public DbSet<Buildings> Buildings {get; set;}
+
+        public DbSet<Leads> Leads {get; set;}
+        
+        public DbSet<Customers> Customers {get; set;}
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Batteries>()
                 .ToTable("batteries");
 
-             modelBuilder.Entity<Elevators>()
+            modelBuilder.Entity<Elevators>()
                 .ToTable("elevators");
+
+            modelBuilder.Entity<Columns>()
+                .ToTable("columns");
+
+            modelBuilder.Entity<Buildings>()
+                .ToTable("buildings");
+
+            modelBuilder.Entity<Leads>()
+                .ToTable("leads");
+
+            modelBuilder.Entity<Customers>()
+                .ToTable("customers");
+
 
         }
 
