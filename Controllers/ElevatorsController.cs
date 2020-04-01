@@ -21,15 +21,14 @@ namespace RestApi.Controllers
       _context = context;
     }
 
-    // GET: api/Elevators
-    [HttpGet]
+    [HttpGet("get/status/all")]
     public async Task<ActionResult<IEnumerable<Elevators>>> GetElevators()
     {
 
       return await _context.Elevators.ToListAsync();
     }
 
-    [HttpGet("get/inactive")]
+    [HttpGet("get/status/inactive")]
     public IEnumerable<Elevators> GetElevatorsInactive()
     {
       IQueryable<Elevators> Elevators =
@@ -41,7 +40,7 @@ namespace RestApi.Controllers
     }
 
 
-    [HttpGet("get/active")]
+    [HttpGet("get/status/active")]
     public IEnumerable<Elevators> GetElevatorsActive()
     {
       IQueryable<Elevators> Elevators =
@@ -52,26 +51,21 @@ namespace RestApi.Controllers
       return Elevators.ToList();
     }
 
-    // [HttpGet("active")]
-    // public IEnumerable<Elevators> GetElevators()
-    // {
-    //   IQueryable<Elevators> Elevators =
-    //   from elev in _context.Elevators
-    //   where elev.Status != "Active"
-    //   select elev;
+    [HttpGet("get/status/intervention")]
+    public IEnumerable<Elevators> GetElevatorsIntervention()
+    {
+      IQueryable<Elevators> Elevators =
+      from elev in _context.Elevators
+      where elev.Status != "Active" && elev.Status != "Inactive"
+      select elev;
 
-    //   return Elevators.ToList();
-    // }
-
-    // GET: api/Elevators/5
-
-
+      return Elevators.ToList();
+    }
 
     //https://stackoverflow.com/questions/9777731/mvc-how-to-return-a-string-as-json
     //https://stackoverflow.com/questions/16459155/how-to-access-json-object-in-c-sharp
 
-    [HttpGet("{id}")]
-    // public async Task<ActionResult<Elevators>> GetElevators(long id, string Status)
+    [HttpGet("get/status/{id}")]
     public async Task<ActionResult<IEnumerable<Elevators>>> GetElevators(long id, string Status)
     {
       var Elevators = await _context.Elevators.FindAsync(id);
@@ -87,43 +81,7 @@ namespace RestApi.Controllers
       return Content(jsonGet.ToString(), "application/json");
     }
 
-    // PUT: api/Elevators/5
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see https://aka.ms/RazorPagesCRUD.
-
-    // [HttpPut("{id}")]
-    // public async Task<IActionResult> PutElevators(long id, Elevators Elevators)
-    // {
-    //   if (id != Elevators.Id)
-    //   {
-    //     return BadRequest();
-    //   }
-
-    //   _context.Entry(Elevators).State = EntityState.Modified;
-
-    //   try
-    //   {
-    //     await _context.SaveChangesAsync();
-    //   }
-    //   catch (DbUpdateConcurrencyException)
-    //   {
-    //     if (!ElevatorsExists(id))
-    //     {
-    //       return NotFound();
-    //     }
-    //     else
-    //     {
-    //       throw;
-    //     }
-    //   }
-
-    //   var jsonPut = new JObject();
-    //   jsonPut["Update"] = "Update done to elevator id : " + id;
-    //   return Content(jsonPut.ToString(), "application/json");
-
-    // }
-
-    [HttpPut("put/activatestatus/{id}")]
+    [HttpPut("put/status/activate/{id}")]
     public async Task<IActionResult> PutElevatorsStatusActive(long id, Elevators Elevators)
     {
       if (id != Elevators.Id)
@@ -150,16 +108,10 @@ namespace RestApi.Controllers
         }
       }
 
-      var jsonGet = new JObject();
-      jsonGet["id"] = Elevators.Id;
-      jsonGet["Column_id"] = Elevators.Column_id;
-      jsonGet["status"] = Elevators.Status;
-      // return Content(jsonGet.ToString(), "application/json");
-      return Content(jsonGet.ToString(), "application/json");
-      // return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
+      return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
     }
 
-    [HttpPut("put/inactivatestatus/{id}")]
+    [HttpPut("put/status/inactivate/{id}")]
     public async Task<IActionResult> PutElevatorsStatusInactive(long id, Elevators Elevators)
     {
       if (id != Elevators.Id)
@@ -189,9 +141,36 @@ namespace RestApi.Controllers
       return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
     }
 
-    // POST: api/Elevators
-    // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-    // more details see https://aka.ms/RazorPagesCRUD.
+    [HttpPut("put/status/intervention/{id}")]
+    public async Task<IActionResult> PutElevatorsStatusIntervention(long id, Elevators Elevators)
+    {
+      if (id != Elevators.Id)
+      {
+        return BadRequest();
+      }
+
+      Elevators.Status = "Intervention";
+      _context.Entry(Elevators).State = EntityState.Modified;
+
+      try
+      {
+        await _context.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!ElevatorsExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
+    }
+
     [HttpPost]
     public async Task<ActionResult<Elevators>> PostElevators(Elevators Elevators)
     {
