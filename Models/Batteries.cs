@@ -4,16 +4,16 @@ using System;
 
 public class Batteries
 {
-    public long Id { get; set; }
-    public long Building_Id { get; set; }
-    public long Employee_Id  { get; set; }
+    public long id { get; set; }
+    public long building_id { get; set; }
+    public long employee_id  { get; set; }
     public string building_type {get; set;}
-    public string Status {get; set;}
-    public DateTime Date_Service_Since {get; set;}
-    public DateTime Date_Last_Inspection {get; set;}
-    public string Operations_Certificate {get; set;}
-    public string Information {get; set;}
-    public string Notes {get; set;}
+    public string status {get; set;}
+    public DateTime date_service_since {get; set;}
+    public DateTime date_last_inspection {get; set;}
+    public string operations_certificate {get; set;}
+    public string information {get; set;}
+    public string notes {get; set;}
 
 
 }

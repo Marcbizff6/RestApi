@@ -21,16 +21,55 @@ namespace RestApi.Controllers
             _context = context;
         }
 
+
+
+ //https://stackoverflow.com/questions/33081102/json-add-new-object-to-existing-json-file-c-sharp/33081258
         // GET: api/Elevators
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Elevators>>> GetElevators()
+        public async Task<ActionResult<List<Elevators>>> GetElevatorsList()
         {
-            return await _context.Elevators.ToListAsync();
+
+          var list =  await _context.Elevators.ToListAsync();
+
+               if (list == null)
+            {
+                return NotFound();
+            }
+
+     
+        List<Elevators> listElevators = new List<Elevators>();
+
+       // var jsonList = new JObject();
+
+        foreach (var elevator in list){
+
+            if (elevator.status == "Inactive"){
+         
+
+            listElevators.Add(elevator);
+            // listElevators.Add(elevator.Status);
+             //  jsonList["id"] = elevator.Id;
+           // jsonList["status"] = elevator.Status;
+
+
+
+            }
         }
 
-        // GET: api/Elevators/5
+       //     return Content (jsonList.ToString(), "application/json");
+            
 
 
+             return listElevators;
+
+            }
+
+//        var list = JsonConvert.DeserializeObject<List<Person>>(myJsonString);
+// list.Add(new Person(1234,"carl2");
+// var convertedJson = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+
+        // GET: api/Elevators/
 
  //https://stackoverflow.com/questions/9777731/mvc-how-to-return-a-string-as-json
  //https://stackoverflow.com/questions/16459155/how-to-access-json-object-in-c-sharp
@@ -46,9 +85,19 @@ namespace RestApi.Controllers
             }
 
             var jsonGet = new JObject ();
-            jsonGet["status"] = Elevators.Status;
+            jsonGet["status"] = Elevators.status;
             return Content  (jsonGet.ToString(), "application/json");
         }
+
+
+
+
+
+
+
+
+
+
 
         // PUT: api/Elevators/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
@@ -56,7 +105,7 @@ namespace RestApi.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutElevators(long id, Elevators Elevators)
         {
-            if (id != Elevators.Id)
+            if (id != Elevators.id)
             {
                 return BadRequest();
             }
@@ -94,7 +143,7 @@ namespace RestApi.Controllers
             _context.Elevators.Add(Elevators);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetElevators", new { id = Elevators.Id }, Elevators);
+            return CreatedAtAction("GetElevators", new { id = Elevators.id }, Elevators);
         }
 
         // DELETE: api/Elevators/5
@@ -115,7 +164,7 @@ namespace RestApi.Controllers
 
         private bool ElevatorsExists(long id)
         {
-            return _context.Elevators.Any(e => e.Id == id);
+            return _context.Elevators.Any(e => e.id == id);
         }
     }
 }
