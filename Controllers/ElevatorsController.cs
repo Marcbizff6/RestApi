@@ -22,35 +22,35 @@ namespace RestApi.Controllers
     }
 
     // GET: api/Elevators
-    // [HttpGet]
-    // public async Task<ActionResult<IEnumerable<Elevators>>> GetElevators()
-    // {
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<Elevators>>> GetElevators()
+    {
 
-    //     return await _context.Elevators.ToListAsync();
-    // }
+      return await _context.Elevators.ToListAsync();
+    }
 
-    [HttpGet("inactive")]
+    [HttpGet("get/inactive")]
     public IEnumerable<Elevators> GetElevatorsInactive()
     {
       IQueryable<Elevators> Elevators =
       from elev in _context.Elevators
-      where elev.Status != "Active"
+      where elev.Status == "Inactive"
       select elev;
 
       return Elevators.ToList();
     }
 
-    [HttpGet("active")]
+
+    [HttpGet("get/active")]
     public IEnumerable<Elevators> GetElevatorsActive()
     {
       IQueryable<Elevators> Elevators =
       from elev in _context.Elevators
-      // where elev.Status != "Active"
-      where elev.Status != "Active"
+      where elev.Status == "Active"
       select elev;
 
       return Elevators.ToList();
-    }    
+    }
 
     // [HttpGet("active")]
     // public IEnumerable<Elevators> GetElevators()
@@ -90,14 +90,48 @@ namespace RestApi.Controllers
     // PUT: api/Elevators/5
     // To protect from overposting attacks, please enable the specific properties you want to bind to, for
     // more details see https://aka.ms/RazorPagesCRUD.
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutElevators(long id, Elevators Elevators)
+
+    // [HttpPut("{id}")]
+    // public async Task<IActionResult> PutElevators(long id, Elevators Elevators)
+    // {
+    //   if (id != Elevators.Id)
+    //   {
+    //     return BadRequest();
+    //   }
+
+    //   _context.Entry(Elevators).State = EntityState.Modified;
+
+    //   try
+    //   {
+    //     await _context.SaveChangesAsync();
+    //   }
+    //   catch (DbUpdateConcurrencyException)
+    //   {
+    //     if (!ElevatorsExists(id))
+    //     {
+    //       return NotFound();
+    //     }
+    //     else
+    //     {
+    //       throw;
+    //     }
+    //   }
+
+    //   var jsonPut = new JObject();
+    //   jsonPut["Update"] = "Update done to elevator id : " + id;
+    //   return Content(jsonPut.ToString(), "application/json");
+
+    // }
+
+    [HttpPut("put/activatestatus/{id}")]
+    public async Task<IActionResult> PutElevatorsStatusActive(long id, Elevators Elevators)
     {
       if (id != Elevators.Id)
       {
         return BadRequest();
       }
 
+      Elevators.Status = "Active";
       _context.Entry(Elevators).State = EntityState.Modified;
 
       try
@@ -116,10 +150,43 @@ namespace RestApi.Controllers
         }
       }
 
-      var jsonPut = new JObject();
-      jsonPut["Update"] = "Update done to elevator id : " + id;
-      return Content(jsonPut.ToString(), "application/json");
+      var jsonGet = new JObject();
+      jsonGet["id"] = Elevators.Id;
+      jsonGet["Column_id"] = Elevators.Column_id;
+      jsonGet["status"] = Elevators.Status;
+      // return Content(jsonGet.ToString(), "application/json");
+      return Content(jsonGet.ToString(), "application/json");
+      // return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
+    }
 
+    [HttpPut("put/inactivatestatus/{id}")]
+    public async Task<IActionResult> PutElevatorsStatusInactive(long id, Elevators Elevators)
+    {
+      if (id != Elevators.Id)
+      {
+        return BadRequest();
+      }
+
+      Elevators.Status = "Inactive";
+      _context.Entry(Elevators).State = EntityState.Modified;
+
+      try
+      {
+        await _context.SaveChangesAsync();
+      }
+      catch (DbUpdateConcurrencyException)
+      {
+        if (!ElevatorsExists(id))
+        {
+          return NotFound();
+        }
+        else
+        {
+          throw;
+        }
+      }
+
+      return Content("Elevator: " + Elevators.Id + ", status as been change to: " + Elevators.Status);
     }
 
     // POST: api/Elevators
